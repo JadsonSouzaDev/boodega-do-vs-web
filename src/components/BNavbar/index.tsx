@@ -9,10 +9,10 @@ import { usePathname } from 'next/navigation';
 
 const BNavbar = () => {
   const items = [
-    { label: "Home", href: "/" },
-    { label: "Solicitar", href: "/solicitar" },
-    { label: "Catálogo", href: "/catalogo" },
-    { label: "Login", href: "/login" },
+    { label: "home", href: "/" },
+    { label: "catálogo", href: "/catalogo" },
+    { label: "solicitar", href: "/solicitar" },
+    { label: "login", href: "/login" },
   ];
 
   const pathname = usePathname();
@@ -37,7 +37,7 @@ const BNavbar = () => {
         <nav className="flex flex-row gap-10 md-gap-4 items-center">
           {items.map((item, key) => {
             return (
-              <BAnchor className={`${pathname === item.href ? "text-sky-500 font-bold" : ''}`} key={key} href={item.href}>
+              <BAnchor className={`${pathname.startsWith(item.href) ? "text-sky-500 font-bold" : ''}`} key={key} href={item.href}>
                 <BText fontSize="base"> {item.label}</BText>
               </BAnchor>
             );

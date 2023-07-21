@@ -42,7 +42,7 @@ const BSearch = ({ placeholder }: BSearchType) => {
           type="button"
           className="text-white absolute right-2.5 bottom-2 md:bottom-2.5 bg-sky-500 hover:bg-sky-600 focus:ring-4 text-sm focus:outline-none focus:ring-sky-300 font-medium rounded-lg px-4 py-2 dark:bg-sky-600 dark:hover:bg-sky-700 dark:focus:ring-sky-800"
         >
-          <BText className="text-xs md:text-sm">Buscar</BText>
+          <BText className="text-xs md:text-sm">buscar</BText>
         </button>
       </div>
     </div>
