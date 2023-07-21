@@ -1,21 +1,29 @@
-"use client"
+"use client";
 
 import Image from "next/image";
 import BFlex from "../BFlex";
 import BAnchor from "../BAnchor";
 import BText from "../BText";
 
-import { usePathname } from 'next/navigation';
+import { usePathname } from "next/navigation";
 
 const BNavbar = () => {
-  const items = [
-    { label: "home", href: "/" },
-    { label: "catálogo", href: "/catalogo" },
-    { label: "solicitar", href: "/solicitar" },
-    { label: "login", href: "/login" },
-  ];
-
   const pathname = usePathname();
+
+  const items = [
+    { label: "home", href: "/", activate: pathname === "/" },
+    {
+      label: "catálogo",
+      href: "/catalogo",
+      activate: pathname.startsWith("/catalogo"),
+    },
+    {
+      label: "solicitar",
+      href: "/solicitar",
+      activate: pathname.startsWith("/solicitar"),
+    },
+    { label: "login", href: "/login", activate: pathname === "/login" },
+  ];
 
   return (
     <BFlex>
@@ -37,7 +45,11 @@ const BNavbar = () => {
         <nav className="flex flex-row gap-10 md-gap-4 items-center">
           {items.map((item, key) => {
             return (
-              <BAnchor className={`${pathname.startsWith(item.href) ? "text-sky-500 font-bold" : ''}`} key={key} href={item.href}>
+              <BAnchor
+                className={`${item.activate ? "text-sky-500 font-bold" : ""}`}
+                key={key}
+                href={item.href}
+              >
                 <BText fontSize="base"> {item.label}</BText>
               </BAnchor>
             );
