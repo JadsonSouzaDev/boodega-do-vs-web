@@ -16,6 +16,10 @@
   }
 }
 
+:focus {
+  outline: none; /* This will remove outline when user hovers over the 2nd box*/
+}
+
 body {
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(

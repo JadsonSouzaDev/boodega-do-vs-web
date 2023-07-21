@@ -1,8 +1,8 @@
-import { ChildrenType } from "../../../types/components";
+import { ChildrenType, StyleCommonType } from "../../../types/components";
 
-const BSection = ({ children, id }: { id: string } & ChildrenType) => {
+const BSection = ({ children, id, className }: { id: string } & ChildrenType & StyleCommonType) => {
   return (
-    <section id={id} className="flex flex-col items-center justify-between">
+    <section id={id} className={`flex flex-col items-center justify-between ${className}`}>
       {children}
     </section>
   );

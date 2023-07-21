@@ -1,7 +1,11 @@
+"use client"
+
 import Image from "next/image";
 import BFlex from "../BFlex";
 import BAnchor from "../BAnchor";
 import BText from "../BText";
+
+import { usePathname } from 'next/navigation';
 
 const BNavbar = () => {
   const items = [
@@ -10,6 +14,8 @@ const BNavbar = () => {
     { label: "Catálogo", href: "/catalogo" },
     { label: "Login", href: "/login" },
   ];
+
+  const pathname = usePathname();
 
   return (
     <BFlex>
@@ -21,7 +27,7 @@ const BNavbar = () => {
           <Image
             src="/logo.svg"
             alt="Logo"
-            className="dark:invert w-28 md:w-48"
+            className="dark:invert w-28 md:w-48 "
             width={0}
             height={0}
             priority
@@ -31,7 +37,7 @@ const BNavbar = () => {
         <nav className="flex flex-row gap-10 md-gap-4 items-center">
           {items.map((item, key) => {
             return (
-              <BAnchor key={key} href={item.href}>
+              <BAnchor className={`${pathname === item.href ? "text-sky-500 font-bold" : ''}`} key={key} href={item.href}>
                 <BText fontSize="base"> {item.label}</BText>
               </BAnchor>
             );
