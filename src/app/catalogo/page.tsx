@@ -8,10 +8,14 @@ import BSection from "../../components/BSection";
 import BSearch from "@/components/BSearch";
 import BList from "@/components/BList";
 import { songs } from "@/mocks/songs";
+import { secondsToFormatedString } from "@/utils/time";
 
 export default function Catalog() {
   const router = useRouter();
-  const rows = [...songs];
+  const rows = songs.map((rawSong) => ({
+    ...rawSong,
+    duration: secondsToFormatedString(rawSong.duration),
+  }));
 
   const headers = [
     { label: "nome", key: "name" },
@@ -27,12 +31,12 @@ export default function Catalog() {
 
   return (
     <BPage>
-      <BSection id="search-bar" className=" py-5 md:py-10 px-2">
+      <BSection id="search-bar" className=" py-5 md:py-10">
         <BFlex className="w-full">
           <BSearch placeholder="procure por músicas, estilos ou artistas" />
         </BFlex>
       </BSection>
-      <BSection id="list" className="px-2">
+      <BSection id="list">
         <BFlex className="w-full">
           <BList headers={headers} rows={rows} onClick={pushToSongPage} />
         </BFlex>
