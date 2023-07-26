@@ -6,10 +6,10 @@ type BYoutubeVideoType = {
 
 const BYoutubeVideo = ({ videoCode }: BYoutubeVideoType) => {
   return (
-    <BFlex className="mx-auto md:mx-0">
+    <BFlex className="mx-auto my-auto md:mx-0 border rounded-xl p-4 bg-black">
       <iframe
-        width="370"
-        height="210"
+        width="320"
+        height="200"
         src={`https://www.youtube.com/embed/${videoCode}`}
         title="YouTube video player"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"

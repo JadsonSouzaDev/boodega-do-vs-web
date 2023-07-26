@@ -10,19 +10,15 @@ import { usePathname } from "next/navigation";
 const BNavbar = () => {
   const pathname = usePathname();
 
+  // { label: "catálogo", href: "/", active: true},
+
   const items = [
-    { label: "home", href: "/", activate: pathname === "/" },
-    {
-      label: "catálogo",
-      href: "/catalogo",
-      activate: pathname.startsWith("/catalogo"),
-    },
     {
       label: "solicitar",
       href: "/solicitar",
-      activate: pathname.startsWith("/solicitar"),
+      active: pathname === "/solicitar",
     },
-    { label: "login", href: "/login", activate: pathname === "/login" },
+    { label: "login", href: "/login", active: pathname === "/login" },
   ];
 
   return (
@@ -43,10 +39,19 @@ const BNavbar = () => {
         </BAnchor>
 
         <nav className="flex flex-row gap-10 md-gap-4 items-center">
+          <BAnchor
+            className={`${
+              !items.some((item) => item.active) ? "text-sky-500 font-bold" : ""
+            }`}
+            href={"/"}
+          >
+            <BText fontSize="base">catálogo</BText>
+          </BAnchor>
+
           {items.map((item, key) => {
             return (
               <BAnchor
-                className={`${item.activate ? "text-sky-500 font-bold" : ""}`}
+                className={`${item.active ? "text-sky-500 font-bold" : ""}`}
                 key={key}
                 href={item.href}
               >
