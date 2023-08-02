@@ -7,7 +7,7 @@ import BCatalogList from "@/components/BList/BCatalogList";
 
 
 async function getSongs(): Promise<Song[]> {
-  const res = await fetch(`${process.env.API_URL}/songs`);
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/songs`);
   if (!res.ok) {
     throw new Error("Failed to fetch data");
   }

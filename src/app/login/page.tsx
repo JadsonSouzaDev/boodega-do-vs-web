@@ -1,3 +1,8 @@
+"use client";
+
+import React from "react";
+import * as Yup from "yup";
+import { useFormik } from "formik";
 import BFlex from "@/components/BFlex";
 import BPage from "../../components/BPage";
 import BSection from "../../components/BSection";
@@ -6,8 +11,34 @@ import BInput from "@/components/BInput";
 import BButton from "@/components/BButton";
 import BAnchor from "@/components/BAnchor";
 import BText from "@/components/BText";
+import BToast from "@/components/BToast";
+
+const schema = Yup.object().shape({
+  email: Yup.string()
+    .required("informe o e-mail")
+    .email("informe um e-mail inválido"),
+  password: Yup.string().required("informe a senha"),
+});
 
 export default function Login() {
+  const loading = false;
+  const error = "email e/ou senha incorretas";
+
+  const login = () => {};
+
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    validationSchema: schema,
+
+    onSubmit: login,
+  });
+
+  const { errors, touched, values, handleChange, handleBlur, handleSubmit } =
+    formik;
+
   return (
     <BPage>
       <BSection id="login-form">
@@ -15,28 +46,63 @@ export default function Login() {
           <BFlex className="items-center justify-center w-full h-full">
             <BFlex className="border rounded-xl items-center p-5 gap-10 bg-white dark:bg-transparent">
               <BHeading as="h2">login</BHeading>
-              <BFlex className="gap-4 w-80">
-                <BInput label="e-mail" type="email" />
-                <BInput label="senha" type="password" />
-                <BAnchor href="/recuperar">
-                  <BText fontWeight="bold">esqueceu a senha?</BText>
-                </BAnchor>
-              </BFlex>
-              <BFlex>
-                <BButton className="px-8 py-2">entrar</BButton>
-              </BFlex>
+              <form onSubmit={handleSubmit} method="POST" id="login">
+                <BFlex className="gap-4 w-80 pb-5">
+                  <BInput
+                    ref={React.createRef()}
+                    id="email"
+                    label="e-mail"
+                    type="email"
+                    required
+                    value={values.email}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    touched={touched.email}
+                    error={errors.email}
+                  />
+                  <BInput
+                    ref={React.createRef()}
+                    id="password"
+                    label="senha"
+                    type="password"
+                    required
+                    value={values.password}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    touched={touched.password}
+                    error={errors.password}
+                  />
+                  <BAnchor href="/recuperar" className="mr-auto">
+                    <BText fontWeight="bold">esqueceu a senha?</BText>
+                  </BAnchor>
+                </BFlex>
+                <BFlex>
+                  <BButton
+                    type="submit"
+                    className="px-8 py-2"
+                    loading={loading}
+                  >
+                    entrar
+                  </BButton>
+                </BFlex>
+              </form>
               <BFlex
                 orientation="row"
                 className="items-center justify-center gap-1"
               >
                 <BText>
-                  ainda não tem uma conta? 
-                  <BAnchor className="font-bold" href="/cadastrar">{" "}crie uma agora</BAnchor>
+                  ainda não tem uma conta?
+                  <BAnchor className="font-bold" href="/cadastrar">
+                    {" "}
+                    crie uma agora
+                  </BAnchor>
                 </BText>
               </BFlex>
             </BFlex>
           </BFlex>
         </div>
+
+        {error && <BToast type="alert" text={error?.toLowerCase()} />}
       </BSection>
     </BPage>
   );

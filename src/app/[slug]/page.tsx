@@ -10,7 +10,7 @@ import { Song } from "../../../types/song";
 import { env } from "process";
 
 async function getSong(slug: string): Promise<Song> {
-  const res = await fetch(`${env.API_URL}/songs/${slug}`);
+  const res = await fetch(`${env.NEXT_PUBLIC_API_URL}/songs/${slug}`);
   if (!res.ok) {
     throw new Error("Failed to fetch data");
   }
