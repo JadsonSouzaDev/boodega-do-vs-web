@@ -12,19 +12,40 @@ const BNavbar = () => {
   const pathname = usePathname();
   const { data: session, status } = useSession();
   const logged = status === "authenticated";
-  const firstName = session?.user?.name?.split(' ')[0].toLowerCase() ?? ""
+  const firstName = session?.user?.name?.split(" ")[0].toLowerCase() ?? "";
 
   const routes = [
-    { active: pathname === "/solicitar" },
-    { active: pathname === "/login" },
-    { active: pathname === "/minha-area" },
+    {
+      label: "cadastrar",
+      href: "/cadastrar",
+      active: pathname === "/cadastrar",
+      logged: false,
+    },
+    {
+      label: "login",
+      href: "/login",
+      active: pathname === "/login",
+      logged: false,
+    },
+    {
+      label: "solicitar",
+      href: "/solicitar",
+      active: pathname === "/solicitar",
+      logged: true,
+    },
+    {
+      label: firstName,
+      href: "/minha-area",
+      active: pathname === "/minha-area",
+      logged: true,
+    },
   ];
 
   return (
-    <BFlex>
+    <BFlex className="z-10">
       <BFlex
         orientation="column"
-        className="items-center md:justify-between py-4 md:flex-row gap-3 md:gap-0"
+        className="items-center md:justify-between py-4 md:flex-row gap-3 md:gap-0 bg-white dark:bg-black"
       >
         <BAnchor href={"/"}>
           <Image
@@ -38,41 +59,35 @@ const BNavbar = () => {
         </BAnchor>
 
         <nav className="flex flex-row gap-10 md-gap-4 items-center">
-          <BAnchor
-            className={`${
-              !routes.some((item) => item.active)
-                ? "text-sky-500 font-bold"
-                : ""
-            }`}
-            href={"/"}
-          >
-            <BText fontSize="base">catálogo</BText>
+          <BAnchor href="/">
+            <BText
+              fontSize="base"
+              className={`${
+                !routes.some((route) => route.active)
+                  ? "text-sky-500 font-bold"
+                  : ""
+              }`}
+            >
+              catálogo
+            </BText>
           </BAnchor>
 
-          <BAnchor
-            className={`${routes[0].active ? "text-sky-500 font-bold" : ""}`}
-            href={"/solicitar"}
-          >
-            <BText fontSize="base">solicitar</BText>
-          </BAnchor>
-
-          {!logged && (
-            <BAnchor
-              className={`${routes[1].active ? "text-sky-500 font-bold" : ""}`}
-              href={"/login"}
-            >
-              <BText fontSize="base">login</BText>
-            </BAnchor>
-          )}
-
-          {logged && (
-            <BAnchor
-              className={`${routes[2].active ? "text-sky-500 font-bold" : ""}`}
-              href={"/minha-area"}
-            >
-              <BText fontSize="base">{firstName}</BText>
-            </BAnchor>
-          )}
+          {routes
+            .filter((route) => route.logged === logged)
+            .map((route, key) => {
+              return (
+                <BAnchor key={key} href={route.href}>
+                  <BText
+                    fontSize="base"
+                    className={`${
+                      route.active ? "text-sky-500 font-bold" : ""
+                    }`}
+                  >
+                    {route.label}
+                  </BText>
+                </BAnchor>
+              );
+            })}
         </nav>
       </BFlex>
 

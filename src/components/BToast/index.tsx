@@ -15,7 +15,7 @@ const Icons = {
 
 const BToast = ({ type, text, onClick }: BToastType) => {
   return (
-    <div role="alert" id="toast" className="absolute top-14 animate__animated animate__slideInDown">
+    <div role="alert" id="toast" className="absolute top-14 animate__animated animate__slideInDown z-50">
       <div className="flex items-center w-full max-w-xs p-4 mb-4 text-gray-500 bg-white rounded-lg shadow dark:text-gray-400 dark:bg-gray-800">
         {Icons[type]}
         <div className="ml-3 text-sm font-normal">{text}</div>

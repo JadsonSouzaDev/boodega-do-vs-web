@@ -32,7 +32,6 @@ const BSongsList = ({ songs: rawSongs }: { songs: Song[] }) => {
   };
 
   const onSearch = async (name: string) => {
-    console.log("procurando por", name);
     const result = await getSongs(name);
     setSongs(result);
   };
