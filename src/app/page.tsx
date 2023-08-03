@@ -1,32 +1,18 @@
 import BFlex from "@/components/BFlex";
 import BPage from "../components/BPage";
 import BSection from "../components/BSection";
-import BSearch from "@/components/BSearch";
 import { Song } from "../../types/song";
-import BCatalogList from "@/components/BList/BCatalogList";
-
-
-async function getSongs(): Promise<Song[]> {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/songs`);
-  if (!res.ok) {
-    throw new Error("Failed to fetch data");
-  }
-  return res.json();
-}
+import BSongsList from "@/components/BList/BSongsList";
+import { getSongsCached } from "@/clients/songs";
 
 export default async function Home() {
-  const songs: Song[] = await getSongs();
+  const songs: Song[] = await getSongsCached();
 
   return (
     <BPage>
-      <BSection id="search-bar" className=" py-5 md:py-10">
+      <BSection id="list-songs">
         <BFlex className="w-full">
-          <BSearch placeholder="procure pelo nome da música" />
-        </BFlex>
-      </BSection>
-      <BSection id="list">
-        <BFlex className="w-full">
-          <BCatalogList songs={songs} />
+          <BSongsList songs={songs} />
         </BFlex>
       </BSection>
     </BPage>

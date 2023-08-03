@@ -4,6 +4,6 @@ export type Song = {
   name: string;
   style: string;
   tonality: string;
-  duration: number;
+  duration: number | string;
   youtubeCode: string;
 };

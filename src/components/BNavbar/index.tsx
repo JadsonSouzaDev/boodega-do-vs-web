@@ -12,7 +12,7 @@ const BNavbar = () => {
   const pathname = usePathname();
   const { data: session, status } = useSession();
   const logged = status === "authenticated";
-  const firstName = session?.user?.name?.split(' ')[0] ?? ""
+  const firstName = session?.user?.name?.split(' ')[0].toLowerCase() ?? ""
 
   const routes = [
     { active: pathname === "/solicitar" },
