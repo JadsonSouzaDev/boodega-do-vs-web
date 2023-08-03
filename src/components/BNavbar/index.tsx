@@ -6,19 +6,18 @@ import BAnchor from "../BAnchor";
 import BText from "../BText";
 
 import { usePathname } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 const BNavbar = () => {
   const pathname = usePathname();
+  const { data: session, status } = useSession();
+  const logged = status === "authenticated";
+  const firstName = session?.user?.name?.split(' ')[0] ?? ""
 
-  // { label: "catálogo", href: "/", active: true},
-
-  const items = [
-    {
-      label: "solicitar",
-      href: "/solicitar",
-      active: pathname === "/solicitar",
-    },
-    { label: "login", href: "/login", active: pathname === "/login" },
+  const routes = [
+    { active: pathname === "/solicitar" },
+    { active: pathname === "/login" },
+    { active: pathname === "/minha-area" },
   ];
 
   return (
@@ -41,24 +40,39 @@ const BNavbar = () => {
         <nav className="flex flex-row gap-10 md-gap-4 items-center">
           <BAnchor
             className={`${
-              !items.some((item) => item.active) ? "text-sky-500 font-bold" : ""
+              !routes.some((item) => item.active)
+                ? "text-sky-500 font-bold"
+                : ""
             }`}
             href={"/"}
           >
             <BText fontSize="base">catálogo</BText>
           </BAnchor>
 
-          {items.map((item, key) => {
-            return (
-              <BAnchor
-                className={`${item.active ? "text-sky-500 font-bold" : ""}`}
-                key={key}
-                href={item.href}
-              >
-                <BText fontSize="base"> {item.label}</BText>
-              </BAnchor>
-            );
-          })}
+          <BAnchor
+            className={`${routes[0].active ? "text-sky-500 font-bold" : ""}`}
+            href={"/solicitar"}
+          >
+            <BText fontSize="base">solicitar</BText>
+          </BAnchor>
+
+          {!logged && (
+            <BAnchor
+              className={`${routes[1].active ? "text-sky-500 font-bold" : ""}`}
+              href={"/login"}
+            >
+              <BText fontSize="base">login</BText>
+            </BAnchor>
+          )}
+
+          {logged && (
+            <BAnchor
+              className={`${routes[2].active ? "text-sky-500 font-bold" : ""}`}
+              href={"/minha-area"}
+            >
+              <BText fontSize="base">{firstName}</BText>
+            </BAnchor>
+          )}
         </nav>
       </BFlex>
 

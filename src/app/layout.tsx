@@ -2,9 +2,9 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Maven_Pro } from "next/font/google";
 import BMain from "../components/BMain";
+import BAuthProvider from "@/components/BAuthProvider";
 
 const font = Maven_Pro({ subsets: ["latin"] });
-// const font = Ubuntu({ subsets: ["latin"], weight: "300" });
 
 export const metadata: Metadata = {
   title: "Boodega do VS - A qualidade que seu show precisava",
@@ -19,7 +19,9 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <body className={font.className}>
-        <BMain>{children}</BMain>
+        <BAuthProvider>
+          <BMain>{children}</BMain>
+        </BAuthProvider>
       </body>
     </html>
   );

@@ -1,8 +1,10 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import * as Yup from "yup";
 import { useFormik } from "formik";
+import { signIn, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import BFlex from "@/components/BFlex";
 import BPage from "../../components/BPage";
 import BSection from "../../components/BSection";
@@ -21,10 +23,35 @@ const schema = Yup.object().shape({
 });
 
 export default function Login() {
-  const loading = false;
-  const error = "email e/ou senha incorretas";
+  const router = useRouter();
+  const [error, setError] = useState<string>();
+  const [loading, setLoading] = useState<boolean>();
 
-  const login = () => {};
+  const { status } = useSession();
+  if (status === "authenticated") router.push("/minha-area");
+
+  const onSubmit = async ({
+    email,
+    password,
+  }: {
+    email: string;
+    password: string;
+  }) => {
+    setLoading(true);
+    const res = await signIn("credentials", {
+      email,
+      password,
+      redirect: false,
+    });
+
+    setLoading(false);
+    if (res?.error) {
+      const errorObject = JSON.parse(res.error);
+      setError(errorObject.message);
+    } else {
+      router.push("/minha-area");
+    }
+  };
 
   const formik = useFormik({
     initialValues: {
@@ -32,8 +59,7 @@ export default function Login() {
       password: "",
     },
     validationSchema: schema,
-
-    onSubmit: login,
+    onSubmit,
   });
 
   const { errors, touched, values, handleChange, handleBlur, handleSubmit } =
@@ -102,7 +128,13 @@ export default function Login() {
           </BFlex>
         </div>
 
-        {error && <BToast type="alert" text={error?.toLowerCase()} />}
+        {error && (
+          <BToast
+            type="alert"
+            text={error?.toLowerCase()}
+            onClick={() => setError("")}
+          />
+        )}
       </BSection>
     </BPage>
   );
