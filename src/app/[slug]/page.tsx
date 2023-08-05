@@ -28,7 +28,7 @@ export default async function Song({ params }: { params: { slug: string } }) {
           <BFlex orientation="row" className="items-baseline gap-2 md:gap-3 ">
             <BText>{song?.style}</BText>
             <BText>{song?.tonality}</BText>
-            <BText>{secondsToFormatedString(song?.duration ?? 0)}</BText>
+            <BText>{secondsToFormatedString(+song?.duration ?? 0)}</BText>
           </BFlex>
           <BFlex className="gap-3 pt-5">
             <BHeading as="h4" className="text-center">preview</BHeading>

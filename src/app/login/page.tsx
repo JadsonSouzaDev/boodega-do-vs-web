@@ -18,7 +18,7 @@ import BToast from "@/components/BToast";
 const schema = Yup.object().shape({
   email: Yup.string()
     .required("informe o e-mail")
-    .email("informe um e-mail inválido"),
+    .email("informe um e-mail válido"),
   password: Yup.string().required("informe a senha"),
 });
 
@@ -44,9 +44,9 @@ export default function Login() {
       redirect: false,
     });
 
-    setLoading(false);
     if (res?.error) {
       const errorObject = JSON.parse(res.error);
+      setLoading(false);
       setError(errorObject.message);
     } else {
       router.push("/minha-area");

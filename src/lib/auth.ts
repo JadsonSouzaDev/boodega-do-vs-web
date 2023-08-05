@@ -48,7 +48,10 @@ const authOptions = {
   callbacks: {
     jwt: async (params) => {
       if (params.user?.token) {
-        const decoded = jwt_decode(params.user.token) as { email: string, name: string };
+        const decoded = jwt_decode(params.user.token) as {
+          email: string;
+          name: string;
+        };
         params.token.name = decoded.name;
         params.token.email = decoded.email;
         params.token.username = decoded.name;
@@ -60,6 +63,8 @@ const authOptions = {
     session: ({ session, token }) => {
       if (session.user) {
         (session.user as { email: string }).email = token.email as string;
+        (session.user as { accessToken: string }).accessToken =
+          token.accessToken as string;
       }
       return session;
     },

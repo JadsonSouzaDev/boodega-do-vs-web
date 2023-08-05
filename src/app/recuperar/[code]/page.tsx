@@ -1,46 +1,45 @@
 "use client";
 
 import * as Yup from "yup";
-import { FormikState, useFormik } from "formik";
+import { useFormik } from "formik";
+import { useRouter } from "next/navigation";
 
 import BFlex from "@/components/BFlex";
-import BPage from "../../components/BPage";
-import BSection from "../../components/BSection";
+import BPage from "../../../components/BPage";
+import BSection from "../../../components/BSection";
 import BHeading from "@/components/BHeading";
 import BInput from "@/components/BInput";
 import BButton from "@/components/BButton";
-import BText from "@/components/BText";
 import React, { useState } from "react";
-import { requestRecovery } from "@/clients/recovery";
+import { updatePassword } from "@/clients/recovery";
 import { AxiosError } from "axios";
 import BToast from "@/components/BToast";
+import { validatePassword } from "@/app/cadastrar/validations/create.validation";
 
 const schema = Yup.object().shape({
-  email: Yup.string()
-    .required("informe o e-mail")
-    .email("informe um e-mail válido"),
+  password: Yup.string()
+    .required("informe a senha")
+    .test(
+      "passwordValidation",
+      "a senha deve conter letras maiúsculas e minúsculas, números e caracteres especiais",
+      validatePassword
+    ),
 });
 
-export default function Recovery() {
+export default function UpdatePassword({
+  params,
+}: {
+  params: { code: string };
+}) {
+  const router = useRouter();
   const [error, setError] = useState<string>();
-  const [success, setSuccess] = useState<string>();
   const [loading, setLoading] = useState<boolean>();
 
-  const onSubmit = async (
-    { email }: { email: string },
-    {
-      resetForm,
-    }: {
-      resetForm: (nextState?: Partial<FormikState<{ email: string }>>) => void;
-    }
-  ) => {
+  const onSubmit = async ({ password }: { password: string }) => {
     try {
       setLoading(true);
-      await requestRecovery(email);
-      setSuccess(
-        "solicitação enviada. verifique a caixa de entrada do seu e-mail"
-      );
-      resetForm();
+      await updatePassword({ code: params.code, password });
+      router.push("/login");
     } catch (error: any | AxiosError) {
       setError(error.response.data.message);
     } finally {
@@ -50,7 +49,7 @@ export default function Recovery() {
 
   const formik = useFormik({
     initialValues: {
-      email: "",
+      password: "",
     },
     validationSchema: schema,
     onSubmit,
@@ -66,32 +65,24 @@ export default function Recovery() {
           <BFlex className="items-center justify-center w-full h-full">
             <BFlex className="border rounded-xl items-center p-5 gap-10 bg-white dark:bg-transparent">
               <BHeading as="h2">recuperar</BHeading>
-              <form onSubmit={handleSubmit} method="POST" id="request-recovery">
+              <form onSubmit={handleSubmit} method="PATCH" id="update-password">
                 <BFlex className="gap-5 w-80 pb-5">
                   <BInput
                     ref={React.createRef()}
-                    id="email"
-                    label="e-mail"
-                    type="email"
+                    id="password"
+                    label="nova senha"
+                    type="password"
                     required
-                    value={values.email}
+                    value={values.password}
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    touched={touched.email}
-                    error={errors.email}
+                    touched={touched.password}
+                    error={errors.password}
                   />
-                  <BText className="text-xs text-gray-600 dark:text-gray-400 text-center">
-                    Digite o endereco de e-mail usado em sua conta. Enviaremos
-                    um e-mail com o link para recuperação.
-                  </BText>
                 </BFlex>
                 <BFlex className="pb-2">
-                  <BButton
-                    type="submit"
-                    className="px-8 py-2"
-                    loading={loading}
-                  >
-                    recuperar conta
+                  <BButton type="submit" className="px-8 py-2" loading={loading}>
+                    atualizar senha
                   </BButton>
                 </BFlex>
               </form>
@@ -103,13 +94,6 @@ export default function Recovery() {
             type="alert"
             text={error?.toLowerCase()}
             onClick={() => setError("")}
-          />
-        )}
-        {success && (
-          <BToast
-            type="success"
-            text={success?.toLowerCase()}
-            onClick={() => setSuccess("")}
           />
         )}
       </BSection>

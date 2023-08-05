@@ -1,5 +1,5 @@
 import { Song } from "../../types/song";
-import apiInstance from "./apiInstance";
+import apiInstance from "./";
 
 export async function getSongsCached(): Promise<Song[]> {
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/songs`, {

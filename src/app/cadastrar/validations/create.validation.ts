@@ -18,7 +18,7 @@ const validatePhone = (phone: string): boolean => {
   return PHONE_REGEX.test(phone);
 };
 
-const validatePassword = (password: string): boolean => {
+export const validatePassword = (password: string): boolean => {
   return PASSWORD_REGEX.test(password);
 };
 
@@ -28,7 +28,7 @@ export const createUserSchema = Yup.object().shape({
     .test("nameValidation", "informe seu nome corretamente", validateName),
   email: Yup.string()
     .required("informe o e-mail")
-    .email("informe um e-mail inválido"),
+    .email("informe um e-mail válido"),
   phone: Yup.string()
     .required("informe o seu celular")
     .test("phoneValidation", "informe seu celular corretamente", validatePhone),

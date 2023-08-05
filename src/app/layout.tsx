@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Maven_Pro } from "next/font/google";
 import BMain from "../components/BMain";
 import BAuthProvider from "@/components/BAuthProvider";
+import { Session } from "next-auth";
 
 const font = Maven_Pro({ subsets: ["latin"] });
 
@@ -12,7 +13,7 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({
-  children,
+  children
 }: {
   children: React.ReactNode;
 }) {
