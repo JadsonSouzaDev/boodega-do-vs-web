@@ -13,7 +13,7 @@ import BText from "@/components/BText";
 import React, { useState } from "react";
 import { requestRecovery } from "@/clients/recovery";
 import { AxiosError } from "axios";
-import BToast from "@/components/BToast";
+import { toast } from "react-toastify";
 
 const schema = Yup.object().shape({
   email: Yup.string()
@@ -22,8 +22,6 @@ const schema = Yup.object().shape({
 });
 
 export default function Recovery() {
-  const [error, setError] = useState<string>();
-  const [success, setSuccess] = useState<string>();
   const [loading, setLoading] = useState<boolean>();
 
   const onSubmit = async (
@@ -37,12 +35,12 @@ export default function Recovery() {
     try {
       setLoading(true);
       await requestRecovery(email);
-      setSuccess(
+      toast.success(
         "solicitação enviada. verifique a caixa de entrada do seu e-mail"
       );
       resetForm();
     } catch (error: any | AxiosError) {
-      setError(error.response.data.message);
+      toast.warn(error.response.data.message);
     } finally {
       setLoading(false);
     }
@@ -98,20 +96,6 @@ export default function Recovery() {
             </BFlex>
           </BFlex>
         </div>
-        {error && (
-          <BToast
-            type="alert"
-            text={error?.toLowerCase()}
-            onClick={() => setError("")}
-          />
-        )}
-        {success && (
-          <BToast
-            type="success"
-            text={success?.toLowerCase()}
-            onClick={() => setSuccess("")}
-          />
-        )}
       </BSection>
     </BPage>
   );

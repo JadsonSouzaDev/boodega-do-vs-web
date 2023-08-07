@@ -13,7 +13,7 @@ import BInput from "@/components/BInput";
 import BButton from "@/components/BButton";
 import BAnchor from "@/components/BAnchor";
 import BText from "@/components/BText";
-import BToast from "@/components/BToast";
+import { toast } from "react-toastify";
 
 const schema = Yup.object().shape({
   email: Yup.string()
@@ -24,7 +24,6 @@ const schema = Yup.object().shape({
 
 export default function Login() {
   const router = useRouter();
-  const [error, setError] = useState<string>();
   const [loading, setLoading] = useState<boolean>();
 
   const { status } = useSession();
@@ -47,7 +46,7 @@ export default function Login() {
     if (res?.error) {
       const errorObject = JSON.parse(res.error);
       setLoading(false);
-      setError(errorObject.message);
+      toast.warn(errorObject.message);
     } else {
       router.push("/minha-area");
     }
@@ -127,14 +126,6 @@ export default function Login() {
             </BFlex>
           </BFlex>
         </div>
-
-        {error && (
-          <BToast
-            type="alert"
-            text={error?.toLowerCase()}
-            onClick={() => setError("")}
-          />
-        )}
       </BSection>
     </BPage>
   );

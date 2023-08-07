@@ -45,7 +45,7 @@ const BNavbar = () => {
     <BFlex className="z-10">
       <BFlex
         orientation="column"
-        className="items-center md:justify-between py-4 md:flex-row gap-3 md:gap-0 bg-white dark:bg-black"
+        className="items-center md:justify-between py-4 md:flex-row gap-3 md:gap-0 bg-white dark:bg-black lg:rounded-3xl md:pr-2"
       >
         <BAnchor href={"/"}>
           <Image

@@ -13,8 +13,8 @@ import BButton from "@/components/BButton";
 import React, { useState } from "react";
 import { updatePassword } from "@/clients/recovery";
 import { AxiosError } from "axios";
-import BToast from "@/components/BToast";
 import { validatePassword } from "@/app/cadastrar/validations/create.validation";
+import { toast } from "react-toastify";
 
 const schema = Yup.object().shape({
   password: Yup.string()
@@ -32,7 +32,6 @@ export default function UpdatePassword({
   params: { code: string };
 }) {
   const router = useRouter();
-  const [error, setError] = useState<string>();
   const [loading, setLoading] = useState<boolean>();
 
   const onSubmit = async ({ password }: { password: string }) => {
@@ -41,7 +40,7 @@ export default function UpdatePassword({
       await updatePassword({ code: params.code, password });
       router.push("/login");
     } catch (error: any | AxiosError) {
-      setError(error.response.data.message);
+      toast.warn(error.response.data.message);
     } finally {
       setLoading(false);
     }
@@ -89,13 +88,6 @@ export default function UpdatePassword({
             </BFlex>
           </BFlex>
         </div>
-        {error && (
-          <BToast
-            type="alert"
-            text={error?.toLowerCase()}
-            onClick={() => setError("")}
-          />
-        )}
       </BSection>
     </BPage>
   );

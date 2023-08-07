@@ -14,15 +14,14 @@ import BInput from "@/components/BInput";
 import BButton from "@/components/BButton";
 import BAnchor from "@/components/BAnchor";
 import BText from "@/components/BText";
-import BToast from "@/components/BToast";
 import { createUserSchema } from "./validations/create.validation";
 import { CreateUser } from "./types/user";
 import { formatPhone } from "./masks/phone.mask";
 import { createUser } from "@/clients/user";
+import { toast } from "react-toastify";
 
 export default function Signup() {
   const router = useRouter();
-  const [error, setError] = useState<string>();
   const [loading, setLoading] = useState<boolean>();
 
   const { status } = useSession();
@@ -45,16 +44,16 @@ export default function Signup() {
 
       if (res?.error) {
         const errorObject = JSON.parse(res.error);
-        setError(errorObject.message);
+        toast.warn(errorObject.message);
       } else {
         router.push("/minha-area");
       }
     } catch (error: any | AxiosError) {
       const status = error.response.data.statusCode;
       if (status === 409) {
-        setError("e-mail já cadastrado");
+        toast.warn("e-mail já cadastrado");
       } else {
-        setError(error.response.data.message);
+        toast.warn(error.response.data.message);
       }
     } finally {
       setLoading(false);
@@ -156,13 +155,6 @@ export default function Signup() {
             </BFlex>
           </BFlex>
         </div>
-        {error && (
-          <BToast
-            type="alert"
-            text={error?.toLowerCase()}
-            onClick={() => setError("")}
-          />
-        )}
       </BSection>
     </BPage>
   );

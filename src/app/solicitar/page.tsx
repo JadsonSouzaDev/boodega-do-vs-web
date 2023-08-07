@@ -11,9 +11,9 @@ import BPage from "../../components/BPage";
 import BSection from "../../components/BSection";
 import BHeading from "@/components/BHeading";
 import { AxiosError } from "axios";
-import BToast from "@/components/BToast";
 import { requestSong } from "@/clients/requestSong";
 import { RequestSong } from "../../../types/requestSong";
+import { toast } from "react-toastify";
 
 const schema = Yup.object().shape({
   link: Yup.string().required("informe um link"),
@@ -21,8 +21,6 @@ const schema = Yup.object().shape({
 });
 
 export default function Request() {
-  const [success, setSuccess] = useState<string>();
-  const [error, setError] = useState<string>();
   const [loading, setLoading] = useState<boolean>();
 
   const onSubmit = async (
@@ -34,10 +32,10 @@ export default function Request() {
     try {
       setLoading(true);
       await requestSong(form);
-      setSuccess("solicitação de música enviada com sucesso");
+      toast.success("solicitação de música enviada com sucesso");
       resetForm();
     } catch (error: any | AxiosError) {
-      setError(error.response.data.message);
+      toast.warn(error.response.data.message);
     } finally {
       setLoading(false);
     }
@@ -107,20 +105,6 @@ export default function Request() {
             </BFlex>
           </BFlex>
         </div>
-        {error && (
-          <BToast
-            type="alert"
-            text={error?.toLowerCase()}
-            onClick={() => setError("")}
-          />
-        )}
-        {success && (
-          <BToast
-            type="success"
-            text={success?.toLowerCase()}
-            onClick={() => setSuccess("")}
-          />
-        )}
       </BSection>
     </BPage>
   );
