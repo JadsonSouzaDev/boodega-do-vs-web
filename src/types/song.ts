@@ -10,13 +10,14 @@ export type Song = {
 
 export type SongVersionEnum = "playback" | "lr" | "multitrack";
 
-export const SongVersionProperties = {
-  playback: { label: "playback", price: 14.99 },
-  lr: { label: "lr", price: 19.99 },
-  multitrack: { label: "multipista", price: 29.99 },
+export type SongVersion = {
+  id: string;
+  key: SongVersionEnum;
+  label: string;
+  price: number;
 };
 
-export type SongVersion = {
+export type SongOrder = {
   song: Song;
   version: SongVersionEnum;
 };

@@ -1,8 +1,18 @@
-import { Song } from "../types/song";
+import { Song, SongVersion } from "../types/song";
 import apiInstance from "./";
 
 export async function getSongsCached(): Promise<Song[]> {
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/songs`, {
+    next: { revalidate: 3600 },
+  });
+  if (!res.ok) {
+    throw new Error("Failed to fetch data");
+  }
+  return res.json();
+}
+
+export async function getSongsVersionsCached(): Promise<SongVersion[]> {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/song-versions`, {
     next: { revalidate: 3600 },
   });
   if (!res.ok) {

@@ -4,32 +4,30 @@ import BFlex from "@/components/BFlex";
 import { formatCurrency } from "@/utils/currency";
 import { addToCart, removeFromCart } from "@/redux/cart.slice";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  Song,
-  SongVersion,
-  SongVersionEnum,
-  SongVersionProperties,
-} from "@/types/song";
+import { Song, SongOrder, SongVersion } from "@/types/song";
 
 type BButtonPriceType = {
   song: Song;
-  version: SongVersionEnum;
+  version: SongVersion;
+  versions: SongVersion[];
 };
 
-const BButtonPrice = ({ song, version }: BButtonPriceType) => {
+const BButtonPrice = ({ song, version, versions }: BButtonPriceType) => {
   const dispatch = useDispatch();
-  const cart = useSelector((state: { cart: SongVersion[] }) => state.cart);
+  const items = useSelector(
+    (state: { cart: { items: SongOrder[] } }) => state.cart.items
+  );
 
-  const selected = cart.find(
-    (item) => item.song.id === song.id && item.version === version
+  const selected = items.find(
+    (item) => item.song.id === song.id && item.version === version.key
   );
 
   const onClick = () => {
-    const songVersion = { song, version };
+    const songOrder = { song, version: version.key };
     if (!selected) {
-      dispatch(addToCart(songVersion));
+      dispatch(addToCart({ songOrder, versions }));
     } else {
-      dispatch(removeFromCart(songVersion));
+      dispatch(removeFromCart({ songOrder, versions }));
     }
   };
 
@@ -45,8 +43,8 @@ const BButtonPrice = ({ song, version }: BButtonPriceType) => {
         className={`${commonClass} ${selected ? selectedClass : normalClass}`}
         onClick={onClick}
       >
-        {SongVersionProperties[version].label} - R$
-        {formatCurrency(SongVersionProperties[version].price)}
+        {version.label} - R$
+        {formatCurrency(version.price)}
       </button>
     </BFlex>
   );

@@ -1,24 +1,46 @@
 "use client";
 
 import { useDispatch, useSelector } from "react-redux";
-import { SongVersion, SongVersionProperties } from "@/types/song";
+import { SongOrder, SongVersion } from "@/types/song";
 import BFlex from "../BFlex";
 import BText from "../BText";
 import BAnchor from "../BAnchor";
 import { formatCurrency } from "@/utils/currency";
 import BButton from "../BButton";
 import { removeFromCart } from "@/redux/cart.slice";
+import { useState } from "react";
+import { AxiosError } from "axios";
+import { toast } from "react-toastify";
+import { createOrder } from "@/clients/order";
+import { useRouter } from "next/navigation";
 
-const BCart = () => {
+const BCart = ({ versions }: { versions: SongVersion[] }) => {
+  const [loading, setLoading] = useState<boolean>();
+  const router = useRouter();
+
   const dispatch = useDispatch();
-  const cart = useSelector((state: { cart: SongVersion[] }) => state.cart);
-  const sum = cart.reduce((total, songVersion) => {
-    return total + SongVersionProperties[songVersion.version].price;
-  }, 0);
+  const { totalAmount, totalQuantity, items } = useSelector(
+    (state: {
+      cart: { items: SongOrder[]; totalAmount: number; totalQuantity: number };
+    }) => state.cart
+  );
+
+  const onClick = async () => {
+    try {
+      setLoading(true);
+      const result = await createOrder(items);
+      toast.success("pedido criado com sucesso");
+      router.push(`/order/${result.id}`);
+    } catch (error: any | AxiosError) {
+      toast.warn(error.response.data.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <BFlex className="py-4 md:py-10 w-full items-center">
-      {cart.length === 0 && (
+      {totalQuantity === 0 && (
         <BFlex>
           <BText>
             seu carrinho está vazio. acesse o{" "}
@@ -29,16 +51,24 @@ const BCart = () => {
           </BText>
         </BFlex>
       )}
-      {cart.length > 0 && (
+      {totalQuantity > 0 && (
         <BFlex className="gap-5 md:gap-10 items-center">
           <BFlex className="sm:flex-row gap-3">
-            {cart.map((songVersion, key) => {
+            {items.map((songOrder, key) => {
+              const version = versions.find(
+                (version) => version.key === songOrder.version
+              ) as SongVersion;
               return (
-                <BFlex key={key} className="w-64 border rounded-xl items-center p-4 bg-white dark:bg-transparent">
+                <BFlex
+                  key={key}
+                  className="w-64 border rounded-xl items-center p-4 bg-white dark:bg-transparent"
+                >
                   <button
                     type="button"
                     className="absolute ml-56 -mt-3 hover:bg-red-400 dark:hover:bg-red-700 rounded-3xl p-1 justify-center items-center"
-                    onClick={() => dispatch(removeFromCart(songVersion))}
+                    onClick={() =>
+                      dispatch(removeFromCart({ songOrder, versions }))
+                    }
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -55,15 +85,13 @@ const BCart = () => {
                       />
                     </svg>
                   </button>
-                  <BText fontSize="base">{songVersion.song.name}</BText>
+                  <BText fontSize="base">{songOrder.song.name}</BText>
                   <BText className="dark:text-gray-400 text-gray-700">
-                    {SongVersionProperties[songVersion.version].label}
+                    {version.label}
                   </BText>
                   <BText fontSize="base" fontWeight="bold" className="pt-3">
                     R$
-                    {formatCurrency(
-                      SongVersionProperties[songVersion.version].price
-                    )}
+                    {formatCurrency(version.price)}
                   </BText>
                 </BFlex>
               );
@@ -71,12 +99,12 @@ const BCart = () => {
           </BFlex>
 
           <BFlex>
-            <BButton>
+            <BButton onClick={onClick} loading={loading}>
               <BText fontSize="base">
                 finalizar compra{" | "}
                 <BText fontWeight="bold">
                   R$
-                  {formatCurrency(sum)}
+                  {formatCurrency(totalAmount)}
                   {" | "}
                 </BText>
                 <svg

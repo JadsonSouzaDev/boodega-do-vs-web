@@ -8,15 +8,25 @@ import BText from "../BText";
 import { usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useSelector } from "react-redux";
-import { SongVersion } from "@/types/song";
+import BBadge from "../BBadge";
+import { useEffect, useState } from "react";
 
 const BNavbar = () => {
   const pathname = usePathname();
+
+  const [isLogged, setLogged] = useState(false);
   const { data: session, status } = useSession();
-  const logged = status === "authenticated";
+
+  useEffect(() => {
+    setLogged(status === "authenticated");
+  }, [status]);
+
   const firstName = session?.user?.name?.split(" ")[0].toLowerCase() ?? "";
 
-  const cart = useSelector((state: { cart: SongVersion[] }) => state.cart);
+  const totalQuantity = useSelector(
+    (state: { cart: { totalQuantity: number } }) => state.cart.totalQuantity
+  );
+  console.log(totalQuantity);
 
   const routes = [
     {
@@ -89,7 +99,7 @@ const BNavbar = () => {
           </BAnchor>
 
           {routes
-            .filter((route) => route.logged === logged)
+            .filter((route) => route.logged === isLogged)
             .map((route, key) => {
               return (
                 <BAnchor key={key} href={route.href}>
@@ -100,12 +110,10 @@ const BNavbar = () => {
                     }`}
                   >
                     {route.label}
+                    {route.label === "carrinho" && totalQuantity > 0 && (
+                      <BBadge>{totalQuantity}</BBadge>
+                    )}
                   </BText>
-                  {route.label === 'carrinho' && cart.length > 0 && (
-                    <div className="ml-1 inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-sky-600 border-2 rounded-full border-transparent">
-                      {cart.length}
-                    </div>
-                  )}
                 </BAnchor>
               );
             })}
