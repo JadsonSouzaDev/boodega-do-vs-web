@@ -1,4 +1,4 @@
-import { ChildrenType } from "../../../types/components";
+import { ChildrenType } from "../../types/components";
 
 const BMain = ({ children }: ChildrenType) => {
   return (

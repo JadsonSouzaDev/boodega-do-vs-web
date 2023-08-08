@@ -1,4 +1,4 @@
-import { Song } from "../../types/song";
+import { Song } from "../types/song";
 import apiInstance from "./";
 
 export async function getSongsCached(): Promise<Song[]> {

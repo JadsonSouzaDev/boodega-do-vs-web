@@ -7,6 +7,8 @@ import BText from "../BText";
 
 import { usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
+import { useSelector } from "react-redux";
+import { SongVersion } from "@/types/song";
 
 const BNavbar = () => {
   const pathname = usePathname();
@@ -14,7 +16,15 @@ const BNavbar = () => {
   const logged = status === "authenticated";
   const firstName = session?.user?.name?.split(" ")[0].toLowerCase() ?? "";
 
+  const cart = useSelector((state: { cart: SongVersion[] }) => state.cart);
+
   const routes = [
+    {
+      label: "carrinho",
+      href: "/carrinho",
+      active: pathname === "/carrinho",
+      logged: false,
+    },
     {
       label: "cadastrar",
       href: "/cadastrar",
@@ -31,6 +41,12 @@ const BNavbar = () => {
       label: "solicitar",
       href: "/solicitar",
       active: pathname === "/solicitar",
+      logged: true,
+    },
+    {
+      label: "carrinho",
+      href: "/carrinho",
+      active: pathname === "/carrinho",
       logged: true,
     },
     {
@@ -85,6 +101,11 @@ const BNavbar = () => {
                   >
                     {route.label}
                   </BText>
+                  {route.label === 'carrinho' && cart.length > 0 && (
+                    <div className="ml-1 inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-sky-600 border-2 rounded-full border-transparent">
+                      {cart.length}
+                    </div>
+                  )}
                 </BAnchor>
               );
             })}

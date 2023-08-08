@@ -1,7 +1,7 @@
 import BFlex from "@/components/BFlex";
 import BPage from "../components/BPage";
 import BSection from "../components/BSection";
-import { Song } from "../../types/song";
+import { Song } from "../types/song";
 import BSongsList from "@/components/BList/BSongsList";
 import { getSongsCached } from "@/clients/songs";
 

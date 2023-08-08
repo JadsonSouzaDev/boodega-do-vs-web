@@ -6,8 +6,9 @@ import BFlex from "@/components/BFlex";
 import BText from "@/components/BText";
 import { secondsToFormatedString } from "@/utils/time";
 import BButtonPrice from "@/components/BButton/BButtonPrice";
-import { Song } from "../../../types/song";
+import { Song } from "../../types/song";
 import { env } from "process";
+import BAnchor from "@/components/BAnchor";
 
 async function getSong(slug: string): Promise<Song> {
   const res = await fetch(`${env.NEXT_PUBLIC_API_URL}/songs/${slug}`);
@@ -22,8 +23,28 @@ export default async function Song({ params }: { params: { slug: string } }) {
 
   return (
     <BPage>
-      <BSection id="details" className="py-5 md:py-10">
+      <BSection id="details" className="py-4">
         <BFlex className="gap-3 w-full items-center">
+          <BFlex className="items-start w-full">
+            <BAnchor className="gap-2 flex">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-5 h-5 inline-flex"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
+                />
+              </svg>
+
+              <BText className="invisible md:visible">voltar para o catálogo</BText>
+            </BAnchor>
+          </BFlex>
           <BHeading>{song?.name?.toLowerCase()}</BHeading>
           <BFlex orientation="row" className="items-baseline gap-2 md:gap-3 ">
             <BText>{song?.style}</BText>
@@ -31,28 +52,30 @@ export default async function Song({ params }: { params: { slug: string } }) {
             <BText>{secondsToFormatedString(+song?.duration ?? 0)}</BText>
           </BFlex>
           <BFlex className="gap-3 pt-5">
-            <BHeading as="h4" className="text-center">preview</BHeading>
+            <BHeading as="h4" className="text-center">
+              preview
+            </BHeading>
             <BYoutubeVideo videoCode={song?.youtubeCode ?? ""} />
           </BFlex>
           <BText className="py-3 md:py-8">
-            <p>Tenha essa música em seu show com a mais alta qualidade.</p>
+            <p>tenha essa música em seu show com a mais alta qualidade.</p>
             <br />
-            <p>Download disponível em 3 opções:</p> <br />
+            <p>download disponível em 3 opções:</p> <br />
             <p>
-              <b>PLAYBACK:</b> Arquivo .mp3 pronto para execução; <br />
-              <b>LR:</b> Arquivo em .mp3 com canais esquerdo e direito
-              divididos. <br />- Esquerdo com metrônomo e voz de condução <br />
-              - Direito com instrumental base (sem bateria e baixo) <br />
-              <b>MULTIPISTA:</b> Todos os canais de instrumentos enviados
+              <b>playback:</b> arquivo .mp3 pronto para execução; <br />
+              <b>lr:</b> arquivo em .mp3 com canais esquerdo e direito
+              divididos. <br />- esquerdo com metrônomo e voz de condução <br />
+              - direito com instrumental base (sem bateria e baixo) <br />
+              <b>multipista:</b> todos os canais de instrumentos enviados
               separadamente, além de canais de metrônomo e condução.
             </p>
             <br />
-            <p>*Obs: a compra de um tipo dá acesso à todos de menor valor</p>
+            <p>*obs: a compra de um tipo dá acesso à todos de menor valor</p>
           </BText>
           <BFlex orientation="row" className="items-start gap-3">
-            <BButtonPrice label="Playback" price={14.99} />
-            <BButtonPrice label="LR" price={19.99} />
-            <BButtonPrice label="Multipista" price={29.99} />
+            <BButtonPrice song={song} version="playback" />
+            <BButtonPrice song={song} version="lr" />
+            <BButtonPrice song={song} version="multitrack" />
           </BFlex>
         </BFlex>
       </BSection>

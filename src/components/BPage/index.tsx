@@ -1,4 +1,4 @@
-import { ChildrenType } from "../../../types/components";
+import { ChildrenType } from "../../types/components";
 import BFlex from "../BFlex";
 import BNavbar from "../BNavbar";
 import BToast from "../BToast";

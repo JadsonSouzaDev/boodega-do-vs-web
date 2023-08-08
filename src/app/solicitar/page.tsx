@@ -12,7 +12,7 @@ import BSection from "../../components/BSection";
 import BHeading from "@/components/BHeading";
 import { AxiosError } from "axios";
 import { requestSong } from "@/clients/requestSong";
-import { RequestSong } from "../../../types/requestSong";
+import { RequestSong } from "../../types/requestSong";
 import { toast } from "react-toastify";
 
 const schema = Yup.object().shape({

@@ -1,4 +1,4 @@
-import { ChildrenType, StyleCommonType } from "../../../types/components";
+import { ChildrenType, StyleCommonType } from "../../types/components";
 import BFlex from "../BFlex";
 
 const LoadingSpinenr = () => {

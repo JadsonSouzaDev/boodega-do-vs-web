@@ -2,7 +2,7 @@ import {
   ChildrenType,
   ClickableType,
   StyleCommonType,
-} from "../../../types/components";
+} from "../../types/components";
 
 const BGrid = ({
   cols,

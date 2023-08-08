@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { Song } from "../../../../types/song";
+import { Song } from "../../../types/song";
 import BList from "..";
 import { secondsToFormatedString } from "@/utils/time";
 import BFlex from "@/components/BFlex";

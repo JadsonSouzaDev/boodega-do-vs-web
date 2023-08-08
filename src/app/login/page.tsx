@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { signIn, useSession } from "next-auth/react";
@@ -22,12 +22,24 @@ const schema = Yup.object().shape({
   password: Yup.string().required("informe a senha"),
 });
 
-export default function Login() {
+export default function Login({
+  searchParams,
+}: {
+  searchParams: { callbackUrl: string };
+}) {
+  const redirectUrl = searchParams.callbackUrl;
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>();
 
   const { status } = useSession();
-  if (status === "authenticated") router.push("/minha-area");
+
+  useEffect(() => {
+    if (status === "authenticated") {
+      redirectUrl
+        ? router.push(new URL(redirectUrl).pathname)
+        : router.push("/minha-area");
+    }
+  }, [status]);
 
   const onSubmit = async ({
     email,
@@ -48,7 +60,8 @@ export default function Login() {
       setLoading(false);
       toast.warn(errorObject.message);
     } else {
-      router.push("/minha-area");
+      setLoading(false);
+      router.refresh();
     }
   };
 

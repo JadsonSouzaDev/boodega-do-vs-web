@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Maven_Pro } from "next/font/google";
 import BMain from "../components/BMain";
 import BAuthProvider from "@/components/BAuthProvider";
+import BReduxProvider from "@/components/BReduxProvider";
 
 const font = Maven_Pro({ subsets: ["latin"] });
 
@@ -12,7 +13,7 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({
-  children
+  children,
 }: {
   children: React.ReactNode;
 }) {
@@ -20,7 +21,9 @@ export default function RootLayout({
     <html lang="pt-BR">
       <body className={font.className}>
         <BAuthProvider>
-          <BMain>{children}</BMain>
+          <BReduxProvider>
+            <BMain>{children}</BMain>
+          </BReduxProvider>
         </BAuthProvider>
       </body>
     </html>

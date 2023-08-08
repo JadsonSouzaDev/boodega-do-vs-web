@@ -1,4 +1,4 @@
-import { ChildrenType, StyleCommonType } from "../../../types/components";
+import { ChildrenType, StyleCommonType } from "../../types/components";
 
 const BSection = ({ children, id, className }: { id: string } & ChildrenType & StyleCommonType) => {
   return (

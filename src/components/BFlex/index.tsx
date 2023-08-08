@@ -4,7 +4,7 @@ import {
   ChildrenType,
   ClickableType,
   StyleCommonType,
-} from "../../../types/components";
+} from "../../types/components";
 
 type BFlexType = {
   orientation?: "column" | "row";

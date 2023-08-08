@@ -1,4 +1,4 @@
-import { RequestSong } from "../../types/requestSong";
+import { RequestSong } from "../types/requestSong";
 import apiInstance from "./";
 
 export const requestSong = async (
