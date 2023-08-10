@@ -26,7 +26,6 @@ const BNavbar = () => {
   const totalQuantity = useSelector(
     (state: { cart: { totalQuantity: number } }) => state.cart.totalQuantity
   );
-  console.log(totalQuantity);
 
   const routes = [
     {

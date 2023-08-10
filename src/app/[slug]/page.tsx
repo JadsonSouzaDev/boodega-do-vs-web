@@ -17,7 +17,9 @@ export type SongAndVersions = {
 };
 
 async function getSong(slug: string): Promise<SongAndVersions> {
-  const res = await fetch(`${env.NEXT_PUBLIC_API_URL}/songs/${slug}`);
+  const res = await fetch(`${env.NEXT_PUBLIC_API_URL}/songs/slug/${slug}`, {
+    next: { revalidate: 3600 },
+  });
   if (!res.ok) {
     throw new Error("Failed to fetch data");
   }
